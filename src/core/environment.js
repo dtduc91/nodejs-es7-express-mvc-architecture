@@ -8,6 +8,8 @@ class Environment extends BaseObject {
     init(args) {
         super.init(args);
 
+        this._module = [];
+
         this.loadConfiguration();
         this.loadModules();
     }
@@ -20,16 +22,21 @@ class Environment extends BaseObject {
             console.error(readConfigException);
         }
     }
-    
-    
+
+
     async loadModules() {
         this._routes = await this.__loadRoutesModulesAsync();
+        this._handlers = await this.__loadHandlerModulesAsync();
 
-        console.log(this._routes);
+        let modules = this._routes.concat(this._handlers);
 
-        this._routes.forEach(route => {
-           console.log('Routtttte => ', route);
+        modules.forEach(moduleFileName => {
+            let moduleFileNameSplitByUnderScore = moduleFileName.split('_');
+
+            this._module.push(require('../' + moduleFileNameSplitByUnderScore[moduleFileNameSplitByUnderScore.length - 1].replace('.js', '') + 's' + '/' + moduleFileName));
         });
+
+        console.log(this._module);
     }
 
 
@@ -37,6 +44,16 @@ class Environment extends BaseObject {
         console.log('Test');
         try {
             return await _.readdirAsync(path.resolve(__dirname, '../routes'));
+        }
+        catch(readConfigException) {
+            console.error(readConfigException);
+        }
+    }
+
+
+    async __loadHandlerModulesAsync() {
+        try {
+            return await _.readdirAsync(path.resolve(__dirname, '../handlers'));
         }
         catch(readConfigException) {
             console.error(readConfigException);
