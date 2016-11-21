@@ -3,20 +3,13 @@ import mongoose from 'mongoose';
 
 class SchemaBuilder extends BaseObject {
     /**
-     * Current instance of the schema.
-     *
-     * @type {null}
-     * @protected
-     */
-    _schemaInstance = null;
-
-
-    /**
      * Initialize data access connection and events.
      *
      * @param schemaOptions
      */
     init(schemaOptions) {
+        //Current instance of the schema.
+        this._schemaInstance = null;
         this.setupSchema(schemaOptions);
     }
 

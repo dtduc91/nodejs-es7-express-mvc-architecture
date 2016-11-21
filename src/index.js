@@ -3,4 +3,6 @@ import 'babel-polyfill';
 import Environment from './core/environment';
 
 
-let environment = Environment.create();
+let environment = Environment.create({}, ()=> {
+    console.log('Should be last');
+});

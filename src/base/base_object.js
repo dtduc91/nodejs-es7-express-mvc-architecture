@@ -13,6 +13,7 @@ class BaseObject {
 
         this.executeInit($instance, args);
 
+        console.log('Execute finish Callback');
         if (_.isFunction(callback)) {
             callback.call($instance, $instance);
         }
