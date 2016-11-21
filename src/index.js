@@ -3,4 +3,4 @@ import 'babel-polyfill';
 import Environment from './core/environment';
 
 
-Environment.create();
+let environment = Environment.create();

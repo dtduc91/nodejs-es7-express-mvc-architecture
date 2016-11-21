@@ -8,15 +8,39 @@ class Environment extends BaseObject {
     init(args) {
         super.init(args);
 
-        this._module = [];
+        this._coreModules = [];
+        this._config = null;
 
         this.loadConfiguration();
-        this.loadModules();
+        this.loadCoreModules();
     }
 
+
+    /**
+     * Getter configuration application environment.
+     *
+     * @returns {null|*}
+     */
+    get configuration() {return this._config;}
+
+
+    /**
+     * Getter core modules.
+     *
+     * @returns {Array}
+     */
+    get coreModules() {return this._modules;}
+
+
+
+    /**
+     * Load configuration json file.
+     */
     async loadConfiguration() {
         try {
-            this._config = _.safeParseJSON(await _.readFileAync(path.resolve(__dirname, '../../config/settings.json'), 'utf-8'), {});
+            let configFile = await _.readFileAync(path.resolve(__dirname, '../../config/settings.json'), 'utf-8');
+            console.info('Load configuration json file => ', configFile);
+            this._config = _.safeParseJSON(configFile, {});
         }
         catch(readConfigException) {
             console.error(readConfigException);
@@ -24,43 +48,38 @@ class Environment extends BaseObject {
     }
 
 
-    async loadModules() {
-        this._routes = await this.__loadRoutesModulesAsync();
-        this._handlers = await this.__loadHandlerModulesAsync();
-
-        let modules = this._routes.concat(this._handlers);
+    /**
+     * Load core modules
+     */
+    async loadCoreModules() {
+        let modules = [].concat(
+            await this.__loadModulesAsync('routes'), 
+            await this.__loadModulesAsync('handlers'),
+            await this.__loadModulesAsync('services')
+        );
 
         modules.forEach(moduleFileName => {
             let moduleFileNameSplitByUnderScore = moduleFileName.split('_');
-
-            this._module.push(require('../' + moduleFileNameSplitByUnderScore[moduleFileNameSplitByUnderScore.length - 1].replace('.js', '') + 's' + '/' + moduleFileName));
+            this._coreModules.push(require('../' + moduleFileNameSplitByUnderScore[moduleFileNameSplitByUnderScore.length - 1].replace('.js', '') + 's' + '/' + moduleFileName));
         });
-
-        console.log(this._module);
     }
 
 
-    async __loadRoutesModulesAsync() {
-        console.log('Test');
+    /**
+     * Load modules async.
+     *
+     * @param dirname
+     * @returns {Promise}
+     * @private
+     */
+    async __loadModulesAsync(dirname) {
         try {
-            return await _.readdirAsync(path.resolve(__dirname, '../routes'));
+            return await _.readdirAsync(path.resolve(__dirname, '../' + dirname));
         }
         catch(readConfigException) {
             console.error(readConfigException);
         }
     }
-
-
-    async __loadHandlerModulesAsync() {
-        try {
-            return await _.readdirAsync(path.resolve(__dirname, '../handlers'));
-        }
-        catch(readConfigException) {
-            console.error(readConfigException);
-        }
-    }
-
-
 }
 
 export default Environment;
