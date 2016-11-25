@@ -26,45 +26,6 @@ class Underscore {
 
 
     /**
-     * Read directory async
-     *
-     * @param path
-     * @returns {Promise}
-     */
-    readdirAsync(path) {
-        return new Promise(function (resolve, reject) {
-            fs.readdir(path, function (error, result) {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(result);
-                }
-            });
-        });
-    }
-
-
-    /**
-     * Read file async
-     *
-     * @param path
-     * @param encoding
-     * @returns {Promise}
-     */
-    readFileAync(path, encoding) {
-        return new Promise((resolve, reject) => {
-            fs.readFile(path, encoding,(error, result) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(result);
-                }
-            });
-        });
-    }
-
-
-    /**
      * Safe parse json function
      *
      * @param value

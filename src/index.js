@@ -3,6 +3,6 @@ import 'babel-polyfill';
 import Environment from './core/environment';
 
 
-let environment = Environment.create({}, ()=> {
-    console.log('Should be last');
+Environment.create({config: require('../config/settings.json')}, (appEnv)=> {
+    console.log(appEnv);
 });
