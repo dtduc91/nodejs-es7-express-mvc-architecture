@@ -42,6 +42,16 @@ class BaseRoute extends BaseObject {
     get middlewares() {
         return this._middlewares;
     }
+
+
+    /**
+     * Inject route middlewares.
+     */
+    injectMiddlewares() {
+        this._middlewares.forEach(middleware => {
+            this._router.use(middleware);
+        })
+    }
 }
 
 export default BaseRoute;

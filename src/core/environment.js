@@ -3,10 +3,11 @@
 import BaseObject from '../base/base_object';
 import fs from 'fs';
 import path from 'path';
+import _ from '../utils/underscore';
 
 class Environment extends BaseObject {
     static CLASS = 'Environment';
-    
+
     init(args) {
         super.init(args);
 
@@ -60,7 +61,10 @@ class Environment extends BaseObject {
                     return;
                 }
 
-                this._coreModules[modules.name] = this.__loadModuleFiles(modules.files, modules.path);
+                this._coreModules[modules.name] = this.__loadModuleFiles(
+                    modules.files,
+                    modules.path,
+                    modules.name.substring(modules.name.length - 1, 0));
             });
     }
 
@@ -119,21 +123,29 @@ class Environment extends BaseObject {
      *
      * @param files
      * @param moduleRootPath
+     * @param groupModulesRemove
      * @returns {Array}
      * @private
      */
-    __loadModuleFiles(files = [], moduleRootPath = '') {
+    __loadModuleFiles(files = [], moduleRootPath = '', groupModulesRemove = '') {
         console.info('Loading module files => ', files);
         let moduleFiles = [];
 
         files.forEach((moduleFile) => {
+            console.log('Remove group => ', groupModulesRemove);
+            let moduleName = _
+                .toCamelCase(moduleFile
+                    .replace(groupModulesRemove, '')
+                    .replace(path.extname(moduleFile), ''));
+
             try {
                 moduleFiles.push({
                     basePath: moduleRootPath,
                     path: moduleRootPath + '/' + moduleFile,
                     fileName: moduleFile,
                     fileExtenstion: path.extname(moduleFile),
-                    ref: require(moduleRootPath + '/' + moduleFile)
+                    ref: require(moduleRootPath + '/' + moduleFile),
+                    key: moduleName
                 });
 
             } catch (e) {

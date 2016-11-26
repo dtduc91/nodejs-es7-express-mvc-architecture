@@ -1,5 +1,4 @@
 /*globals Promise:true*/
-import fs from 'fs';
 
 class Underscore {
     constructor() {
@@ -39,6 +38,20 @@ class Underscore {
         catch(e) {
             return def;
         }
+    }
+
+
+    /**
+     * Convert to string into camel case format.
+     *
+     * @param str
+     * @returns {XML|string}
+     */
+    toCamelCase(str) {
+        return str.replace(/^([A-Z])|[\s-_](\w)/g, function(match, p1, p2, offset) {
+            if (p2) return p2.toUpperCase();
+            return p1.toLowerCase();
+        });
     }
 }
 

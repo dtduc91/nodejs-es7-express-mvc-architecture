@@ -37,6 +37,9 @@ Environment.create({
              * End application global middlewares section
              */
 
+            initializedApp.createAppControllers();
+
+            // Run server.
             initializedApp.run(3000, (e)=> {
                 if (e) throw e;
 
