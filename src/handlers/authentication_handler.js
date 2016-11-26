@@ -2,6 +2,8 @@ import BaseHandler from '../base/base_handler';
 import jwt from 'jsonwebtoken' // used to create, sign, and verify tokens
 
 class AuthenticationHandler extends BaseHandler {
+    static CLASS = 'AuthenticationHandler';
+    
     init(args = {}) {
         super.init(args);
         console.log('Authentication handler init.');

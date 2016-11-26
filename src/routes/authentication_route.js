@@ -1,9 +1,10 @@
 import BaseRoute from '../base/base_route';
 
 class AuthenticationRoute extends BaseRoute{
+    static CLASS = 'AuthenticationRoute';
+    
     init(args) {
         super.init({
-            router: args.router,
             rootPath: '/'
         });
     }

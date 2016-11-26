@@ -1,19 +1,20 @@
 /*globals Promise:true*/
 /*globals __dirname:true*/
 import BaseObject from '../base/base_object';
-import _ from '../utils/underscore';
 import fs from 'fs';
 import path from 'path';
 
-
 class Environment extends BaseObject {
+    static CLASS = 'Environment';
+    
     init(args) {
         super.init(args);
 
-        this._coreModules = [];
+        this._coreModules = {};
         this._config = args.config;
+        this._rootDir = args.rootDir;
 
-        this.loadApplicationModules();
+        this.loadApplicationModules(args.coreModulesMap);
     }
 
 
@@ -30,68 +31,132 @@ class Environment extends BaseObject {
      *
      * @returns {Array}
      */
-    get coreModules() {return this._modules;}
+    get coreModules() {return this._coreModules;}
+
+
+    /**
+     * Getter root dir project.
+     *
+     * @returns {*}
+     */
+    get rootDir() {return this._rootDir;}
 
 
     /**
      * Load core modules
+     *
+     * @param coreModulesMap
      */
-    loadApplicationModules() {
-        let coreModules = [].concat(
-            this.__loadCoreModulesLocation('routes'),
-            this.__loadCoreModulesLocation('handlers'),
-            this.__loadCoreModulesLocation('services')
-        );
+    loadApplicationModules(coreModulesMap) {
+        if (!Array.isArray(coreModulesMap) && 0 === coreModulesMap.length) {
+            console.error('Error core modules map array not defined properly.');
+            return;
+        }
 
-        coreModules.forEach(modules => {
-            if (!Array.isArray(modules.files) && 0 === modules.files.length) {
-                console.error('Not found module files.');
-                return;
-            }
-
-            modules.files.forEach((moduleFile) => {
-                console.log('Moduleee => ', moduleFile);
-                let moduleFileName = moduleFile.split('_');
-
-                try {
-                    this._coreModules.push(Object.assign({},
-                        {
-                            modulesGroupName: modules.name,
-                            path: modules.path,
-                            moduleFileName: moduleFile
-                        } ,
-                        {
-                            ref: require('../' + moduleFileName[moduleFileName.length - 1].replace('.js', '')+ 's' + '/' + moduleFile)
-                        }));
-                } catch (e) {
-                    console.error('Cannot require module => ', e);
+        this.__runCoreModulesMap(coreModulesMap)
+            .forEach(modules => {
+                if (!Array.isArray(modules.files) && 0 === modules.files.length) {
+                    console.error('Not found module files.');
+                    return;
                 }
-                finally {
-                    console.log('Finish load core modules.');
-                }
+
+                this._coreModules[modules.name] = this.__loadModuleFiles(modules.files, modules.path);
             });
+    }
+
+
+    /**
+     * Iterable over core modules map names.
+     *
+     * @param coreModulesMap
+     * @returns {Array}
+     * @private
+     */
+    __runCoreModulesMap(coreModulesMap) {
+        let coreModules = [];
+
+        coreModulesMap.forEach((coreModule) => {
+            this.__InitCoreModuleGroup(coreModule);
+
+            console.info('Load core module location path => ', coreModule);
+
+            let coreModuleGroup = this.__loadCoreModulesLocation(coreModule);
+
+            console.info('Core modules group => ', coreModules);
+
+            coreModules = coreModules.concat(coreModuleGroup);
         });
+
+        console.info('All core modules location path waiting for instantiation => ', coreModules);
+
+        return coreModules;
     }
 
 
     /**
      * Load modules async.
      *
-     * @param dirModule
+     * @param coreModulesName
      * @returns {Object}
      * @private
      */
-    __loadCoreModulesLocation(dirModule) {
+    __loadCoreModulesLocation(coreModulesName) {
         try {
             return {
-                name: dirModule,
-                files: fs.readdirSync(path.resolve(__dirname, '../' + dirModule)),
-                path: __dirname + '../' + dirModule
+                name: coreModulesName,
+                files: fs.readdirSync(path.resolve(this._rootDir, coreModulesName)),
+                path: this._rootDir + '/' + coreModulesName
             };
         }
         catch(readConfigException) {
             console.error(readConfigException);
         }
+    }
+
+
+    /**
+     * Load module files.
+     *
+     * @param files
+     * @param moduleRootPath
+     * @returns {Array}
+     * @private
+     */
+    __loadModuleFiles(files = [], moduleRootPath = '') {
+        console.info('Loading module files => ', files);
+        let moduleFiles = [];
+
+        files.forEach((moduleFile) => {
+            try {
+                moduleFiles.push({
+                    basePath: moduleRootPath,
+                    path: moduleRootPath + '/' + moduleFile,
+                    fileName: moduleFile,
+                    fileExtenstion: path.extname(moduleFile),
+                    ref: require(moduleRootPath + '/' + moduleFile)
+                });
+
+            } catch (e) {
+                console.error('Cannot load file due to the reason => ', e);
+            }
+        });
+
+        console.info('Loaded module files => ', moduleFiles);
+
+        return moduleFiles;
+    }
+
+
+    /**
+     * Init core module group
+     *
+     * @param coreModule
+     * @private
+     */
+    __InitCoreModuleGroup(coreModule) {
+        console.info('Init core module container group for new modules => ', coreModule);
+
+        this._coreModules[coreModule] = [];
     }
 }
 

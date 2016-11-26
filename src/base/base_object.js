@@ -1,6 +1,9 @@
 import _ from '../utils/underscore';
 
 class BaseObject {
+    static CLASS = 'BaseObject';
+
+
     /**
      * Creating instance instead of using the `new` word.
      *
