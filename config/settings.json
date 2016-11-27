@@ -1,3 +1,4 @@
 {
-  "AuthenticationService": {"secret": "123"}
+  "AuthenticationService": {"secret": "123"},
+  "connectionString": "localhost"
 }

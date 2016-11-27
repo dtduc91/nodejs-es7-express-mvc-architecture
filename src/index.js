@@ -36,9 +36,19 @@ Environment.create({
             /**
              * End application global middlewares section
              */
-
+            // Create communicator data access to manipulate and retrive our data.
+            initializedApp.createCommunicatorDataAccess({
+                communicatorErrorConnection: (e) => {
+                    console.error('Communicator error => ', e);
+                },
+                communicatorActiveChannel: ()=> {
+                    console.debug('Can build your schema models here.');
+                },
+                connectionString: appEnv.configuration['connectionString']
+            });
+            // Create application business logic controllers responsible to
+            // Handle any route that defined in route modules.
             initializedApp.createAppControllers();
-
             // Run server.
             initializedApp.run(3000, (e)=> {
                 if (e) throw e;

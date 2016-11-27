@@ -1,5 +1,6 @@
 import BaseObject from '../base/base_object';
 import express from 'express';
+import Communicator from './communicator';
 import * as CORE from '../constants/environment_constant';
 import _ from '../utils/underscore';
 
@@ -85,6 +86,16 @@ class Initialize extends BaseObject {
                 this._app.use(route.instance.routePath, route.instance.router)
             });
         });
+    }
+
+
+    /**
+     * Create communicator data access channel to manipulate actions over data.
+     * 
+     * @param communicatorOptions
+     */
+    createCommunicatorDataAccess(communicatorOptions) {
+        Communicator.create(communicatorOptions);
     }
 
 

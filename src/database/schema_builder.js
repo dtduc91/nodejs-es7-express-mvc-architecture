@@ -14,9 +14,13 @@ class SchemaBuilder extends BaseObject {
     }
 
 
+    /**
+     * Setup schema model moongose.
+     * 
+     * @param schemaOptions
+     */
     setupSchema(schemaOptions) {
         this._schemaInstance = mongoose.model(schemaOptions.name, new mongoose.Schema(schemaOptions.table));
-        return this;
     }
 }
 
