@@ -49,7 +49,7 @@ Route Core Modules
 Every route defined in the routes folder with the prefix `_route`,
 the route module should be initialized in her file the rootPath it's me the root route for this router.
 ```
-#for example:
+# For example:
 
 super.init({
    rootPath: '/'
@@ -83,7 +83,7 @@ and for mapping this routing we should create our routeMap Array object.
   ]
 
   I will not deep dive and explain on it because it seems kinda explanatory.
-        
+
 ```
 
 
