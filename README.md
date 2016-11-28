@@ -4,7 +4,7 @@ Hey guys, I started to write this repo from the reason that I didn't find any go
 I call this architecture carolina phase 1.
 Everyone is more than welcome to fork this repo upload issue or email me to make a suggestions.
 
-Getting Started
+Installation
 ---------------
 
 The easiest way to get started is to clone the repository:
@@ -24,6 +24,18 @@ npm i gulp -g
 
 # Then simply start your app with the automation tool gulp
 gulp
+```
+
+Tests
+-----
+
+The easiest way to get tests results.
+
+```bash
+# Run test with coverage istanbul.
+
+gulp coverage
+
 ```
 
 Architecture Core Principle
@@ -46,9 +58,11 @@ OK!, lets dive in into our core modules.
 
 Route Core Modules
 ------------------
-Every route defined in the routes folder with the prefix `_route`,
-the route module should be initialized in her file the rootPath it's me the root route for this router.
-```
+
+Every route defined in the routes folder with the prefix `_route` in the routes root folder.
+The route module should be initialized in her file the rootPath it's me the root route for this router.
+
+```bash
 # For example:
 
 super.init({
@@ -83,8 +97,49 @@ and for mapping this routing we should create our routeMap Array object.
   ]
 
   I will not deep dive and explain on it because it seems kinda explanatory.
+  We provided a basic simple authentication route for demonstration.
 
 ```
 
 
-# To be continue.
+Handler Core Modules
+--------------------
+
+Every route defined in the routes folder with the prefix `_handler` in the handlers root folder.
+The handler module should be match to exact route module name so the Initialized core could combine between them,
+and create the route control action binding.
+
+```bash
+# For example:
+
+Inside the handler class
+
+    test(req, res) {
+        return res.send('Test');
+    }
+
+    testData(req, res) {
+        return res.send('Test');
+    }
+
+    testDataData(req, res) {
+        return res.send('Test');
+    }
+
+In the previous route map the handler name should be match to a function call in the handler module.
+```
+
+Service Core Modules
+--------------------
+
+Every service defined in the routes folder with the prefix `_service` in the services root folder.
+The service module in initailized in the initailized core entity and also been passing dynamically the service configuration
+from the config json file by their class name. And can be used in other files over the application.
+
+```bash
+# For example:
+
+Import TestService from '../services/test';
+
+TestService.create().testData();
+```
