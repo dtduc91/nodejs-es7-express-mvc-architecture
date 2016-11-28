@@ -1,8 +1,10 @@
 # Welcome to ES7 Node js Web Server API Architecture Carolina ![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)
-Hey guys, I started to write this repo from the reason that I didn't find any good node js es6/7 architecture across the net.
 
+
+Motivation
+----------
+Hey guys, I started to write this repo from the reason that I didn't find any good node js es6/7 architecture across the net.
 I call this architecture carolina phase 1.
-Everyone is more than welcome to fork this repo upload issue or email me to make a suggestions.
 
 Installation
 ---------------
@@ -143,3 +145,12 @@ Import TestService from '../services/test';
 
 TestService.create().testData();
 ```
+
+Contributors
+------------
+Everyone is more than welcome to fork this repo upload issue or email me to make a suggestions.
+
+
+License
+-------
+MIT
