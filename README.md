@@ -162,4 +162,4 @@ Everyone is more than welcome to fork this repo upload issue or email me to make
 
 License
 -------
-![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
