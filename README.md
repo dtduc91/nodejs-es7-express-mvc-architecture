@@ -1,4 +1,4 @@
-# Welcome to ES7 Node js Web Server API Architecture Carolina
+# Welcome to ES7 Node js Web Server MVC API Architecture Carolina
 ![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)
 ![Build Status](https://travis-ci.org/sayeko/nodejs-es7-clean-boilerplate.svg?branch=master)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badge/)
